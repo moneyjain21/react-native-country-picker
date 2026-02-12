@@ -25,8 +25,10 @@ __mocks__/
 coverage/
 jest.config.js
 
-# TypeScript source maps (if not needed)
+# TypeScript source maps (not needed in production)
 *.map
+*.js.map
+*.d.ts.map
 
 # Git
 .git/
