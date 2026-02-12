@@ -13,6 +13,20 @@ A highly customizable country picker component for React Native with search, the
 - Orientation-aware layouts
 - Fully typed with TypeScript
 
+## Demo
+
+<p align="center">
+  <img src="./demo/react-native-modal-country-picker-ios.gif" alt="iOS Demo" width="300" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="./demo/react-native-modal-country-picker-android.gif" alt="Android Demo" width="300" />
+</p>
+
+<p align="center">
+  <em>iOS</em>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <em>Android</em>
+</p>
+
 ## Installation
 
 ```bash
