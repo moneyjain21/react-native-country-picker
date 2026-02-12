@@ -1,4 +1,4 @@
-# react-native-country-picker
+# react-native-modal-country-picker
 
 A highly customizable country picker component for React Native with search, theming, localization, and orientation support.
 
@@ -16,9 +16,9 @@ A highly customizable country picker component for React Native with search, the
 ## Installation
 
 ```bash
-npm install react-native-country-picker
+npm install react-native-modal-country-picker
 # or
-yarn add react-native-country-picker
+yarn add react-native-modal-country-picker
 ```
 
 ### Peer Dependencies
@@ -36,7 +36,7 @@ npm install react-native-safe-area-context react-native-svg
 ```tsx
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { CountryPicker, Country } from 'react-native-country-picker';
+import { CountryPicker, Country } from 'react-native-modal-country-picker';
 
 const App = () => {
   const [country, setCountry] = useState<Country | null>(null);

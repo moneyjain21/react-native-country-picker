@@ -1,5 +1,5 @@
 {
-  "name": "react-native-country-picker",
+  "name": "react-native-modal-country-picker",
   "version": "1.0.0",
   "description": "A customizable country picker component for React Native with search, theming, orientation and IP address based country detection support",
   "main": "lib/commonjs/index.js",
@@ -27,6 +27,7 @@
   },
   "keywords": [
     "react-native",
+    "react-native-modal-country-picker",
     "react-native-country-picker",
     "react-native-country-select",
     "react-native-country-codes",
@@ -56,14 +57,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/moneyjain21/react-native-country-picker.git"
+    "url": "git+https://github.com/moneyjain21/react-native-modal-country-picker.git"
   },
   "author": "Money Jain",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/moneyjain21/react-native-country-picker/issues"
+    "url": "https://github.com/moneyjain21/react-native-modal-country-picker/issues"
   },
-  "homepage": "https://github.com/moneyjain21/react-native-country-picker#readme",
+  "homepage": "https://github.com/moneyjain21/react-native-modal-country-picker#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
