@@ -1,6 +1,6 @@
 {
   "name": "react-native-modal-country-picker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A customizable country picker component for React Native with search, theming, orientation and IP address based country detection support",
   "main": "lib/module/index.js",
   "module": "lib/module/index.js",
@@ -10,6 +10,7 @@
   "files": [
     "lib/module",
     "lib/typescript",
+    "README.md",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__",
