@@ -622,7 +622,10 @@ const CountryPicker: React.FC<CountryPickerProps> = ({
 
     return (
       <View style={[styles.dropdownIcon, dropdownIconStyle]}>
-        <ArrowDownIcon size={20} color={themeColors.secondaryTextColor} />
+        <Image
+          source={{ uri: ArrowDownIcon }}
+          style={[styles.dropdownIconImage,{ tintColor: themeColors.secondaryTextColor }]}
+        />
       </View>
     );
   };
