@@ -30,6 +30,7 @@ const CountryPicker: React.FC<CountryPickerProps> = ({
   disabled = false,
   autoSelectByDeviceRegion = false,
   autoSelectByIP = false,
+  defaultCountry,
 
   // Calling Code Mode
   callingCodeMode = false,
@@ -162,7 +163,25 @@ const CountryPicker: React.FC<CountryPickerProps> = ({
     return nameObj[locale] || nameObj.en || '';
   }, [locale]);
 
-  // Compute initial selected country (from prop or device region) - runs once on mount
+  // Helper function to create a Country object from a country code
+  const getCountryFromCode = (countryCode: string): Country | null => {
+    const countryData = (countriesData as Record<string, any>)[countryCode.toUpperCase()];
+    if (countryData) {
+      const currentLocale = localeProp || getCurrentLocale();
+      return {
+        code: countryCode.toUpperCase(),
+        name: countryData.name?.[currentLocale] || countryData.name?.en || '',
+        localizedNames: countryData.name,
+        callingCode: countryData.callingCode || '',
+        flag: countryData.flag || '',
+        currency: countryData.currency || '',
+        region: countryData.region || '',
+      };
+    }
+    return null;
+  };
+
+  // Compute initial selected country (from prop, device region, or defaultCountry fallback) - runs once on mount
   const getInitialCountry = (): Country | null => {
     if (initialSelectedCountry) {
       return initialSelectedCountry;
@@ -171,19 +190,26 @@ const CountryPicker: React.FC<CountryPickerProps> = ({
     if (autoSelectByDeviceRegion) {
       const deviceCountryCode = getDeviceCountryCode();
       if (deviceCountryCode) {
-        const countryData = (countriesData as Record<string, any>)[deviceCountryCode.toUpperCase()];
-        if (countryData) {
-          const currentLocale = localeProp || getCurrentLocale();
-          return {
-            code: deviceCountryCode.toUpperCase(),
-            name: countryData.name?.[currentLocale] || countryData.name?.en || '',
-            localizedNames: countryData.name,
-            callingCode: countryData.callingCode || '',
-            flag: countryData.flag || '',
-            currency: countryData.currency || '',
-            region: countryData.region || '',
-          };
+        const country = getCountryFromCode(deviceCountryCode);
+        if (country) {
+          return country;
         }
+      }
+      // If device region detection failed and defaultCountry is provided, use it as fallback
+      if (defaultCountry) {
+        const country = getCountryFromCode(defaultCountry);
+        if (country) {
+          return country;
+        }
+      }
+    }
+
+    // If no auto-detection is enabled but defaultCountry is provided, use it
+    // (only when autoSelectByIP is not enabled, as IP detection handles its own fallback)
+    if (!autoSelectByIP && defaultCountry) {
+      const country = getCountryFromCode(defaultCountry);
+      if (country) {
+        return country;
       }
     }
     
@@ -237,43 +263,47 @@ const CountryPicker: React.FC<CountryPickerProps> = ({
       ) {
         hasIPFetchedRef.current = true;
         const ipCountryCode = await getCountryByIP();
+        
+        let country: Country | null = null;
+        
         if (ipCountryCode) {
-          const countryData = (countriesData as Record<string, any>)[ipCountryCode.toUpperCase()];
-          if (countryData) {
-            const currentLocale = localeProp || getCurrentLocale();
-            const country: Country = {
-              code: ipCountryCode.toUpperCase(),
-              name: countryData.name?.[currentLocale] || countryData.name?.en || '',
-              localizedNames: countryData.name,
-              callingCode: countryData.callingCode || '',
-              flag: countryData.flag || '',
-              currency: countryData.currency || '',
-              region: countryData.region || '',
-            };
-            setSelectedCountry(country);
-            onSelectCountry?.(country);
-          }
+          country = getCountryFromCode(ipCountryCode);
+        }
+        
+        // If IP lookup failed or returned invalid country, use defaultCountry as fallback
+        if (!country && defaultCountry) {
+          country = getCountryFromCode(defaultCountry);
+        }
+        
+        if (country) {
+          setSelectedCountry(country);
+          onSelectCountry?.(country);
         }
       }
     };
 
     fetchCountryByIP();
-  }, [autoSelectByIP, initialSelectedCountry, localeProp, onSelectCountry]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoSelectByIP, initialSelectedCountry, localeProp, onSelectCountry, defaultCountry]);
 
-  // Call onSelectCountry for device region auto-select (runs once on mount)
-  const hasDeviceRegionCallbackFiredRef = useRef(false);
+  // Call onSelectCountry for device region auto-select or defaultCountry (runs once on mount)
+  const hasInitialCallbackFiredRef = useRef(false);
   useEffect(() => {
-    if (
-      autoSelectByDeviceRegion &&
+    // Fire callback for:
+    // 1. Device region auto-select (when not using IP-based selection)
+    // 2. defaultCountry fallback (when no auto-detection is enabled or device region failed)
+    const shouldFireCallback = 
       !initialSelectedCountry &&
       selectedCountry &&
-      !hasDeviceRegionCallbackFiredRef.current &&
-      !autoSelectByIP // Don't fire if IP-based selection is also enabled (it will handle the callback)
-    ) {
-      hasDeviceRegionCallbackFiredRef.current = true;
+      !hasInitialCallbackFiredRef.current &&
+      !autoSelectByIP && // Don't fire if IP-based selection is enabled (it handles its own callback)
+      (autoSelectByDeviceRegion || defaultCountry); // Fire for device region or defaultCountry
+
+    if (shouldFireCallback) {
+      hasInitialCallbackFiredRef.current = true;
       onSelectCountry?.(selectedCountry);
     }
-  }, [autoSelectByDeviceRegion, autoSelectByIP, initialSelectedCountry, selectedCountry, onSelectCountry]);
+  }, [autoSelectByDeviceRegion, autoSelectByIP, initialSelectedCountry, selectedCountry, onSelectCountry, defaultCountry]);
 
   // Filter countries based on search query and move selected/preferred countries to top
   const filteredCountries = useMemo(() => {

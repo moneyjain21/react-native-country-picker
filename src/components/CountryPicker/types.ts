@@ -72,6 +72,15 @@ export interface CountryPickerProps {
    * Default: false
    */
   autoSelectByIP?: boolean;
+  /**
+   * Default country code (e.g., "US", "IN", "DE") to pre-select.
+   * This is used as a fallback when:
+   * - autoSelectByDeviceRegion fails to detect the device region
+   * - autoSelectByIP fails to fetch the country from IP address
+   * - Neither auto-detection option is enabled
+   * Only applies if no `selectedCountry` prop is provided.
+   */
+  defaultCountry?: string;
 
   // ==================== Calling Code Mode ====================
   /**

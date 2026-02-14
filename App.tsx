@@ -40,6 +40,7 @@ function AppContent() {
             onSelectCountry={handleSelectCountry}
             fullScreen
             preferredCountries={['US', 'GB', 'CA', 'AU', 'IN']}
+            defaultCountry="US"
           />
 
           {/* Custom Theme */}
